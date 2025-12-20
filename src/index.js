@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const logger = require("./logger.js");
 const client = new Discord.Client({ intents: ["Guilds", "GuildMessages", "MessageContent", "GuildMembers"] });
 const {getUser, setUser} = require("./database");
+require("dotenv").config();
 
 client.on("clientReady", () => {
     logger.info(`Bot conectado como ${client.user.tag}`);
