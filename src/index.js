@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const config = require("../config.json");
 const logger = require("./logger.js");
 const client = new Discord.Client({ intents: ["Guilds", "GuildMessages", "MessageContent", "GuildMembers"] });
 const {getUser, setUser} = require("./database");
@@ -105,4 +104,4 @@ client.on("interactionCreate", async interaction => {
     }
 })
 
-client.login(config.TOKEN);
+client.login(process.env.TOKEN);
