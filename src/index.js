@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const config = require("../config.json");
 const logger = require("./logger.js");
-const client = new Discord.Client({ intents: ["Guilds", "GuildMessages", "MessageContent"] });
+const client = new Discord.Client({ intents: ["Guilds", "GuildMessages", "MessageContent", "GuildMembers"] });
 const {getUser, setUser} = require("./database");
 
 client.on("clientReady", () => {
@@ -45,7 +45,7 @@ client.on("messageCreate", async (message) => {
     const newLevel = Math.floor(Math.sqrt(user.xp / 100) + 1);
     if (newLevel > user.level){
         user.level = newLevel;
-        const levelsChannel = client.channels.cache.get("1440669831375355945");
+        const levelsChannel = client.channels.cache.get(process.env.LEVEL_CHANNEL);
         if (levelsChannel) {
             await levelsChannel.send(`〔🌍〕${message.author} ha subido al nivel **${newLevel}**. Enhorabuena!`);
         }
@@ -74,10 +74,15 @@ client.on("messageCreate", async (message) => {
     }
 });
 
-const MEMBER_ROLE_ID = "1440671120360738897";
+const MEMBER_ROLE_ID = process.env.MEMBER_ROLE;
 
-client.on('guildMemberAdd', async (member) => {
+client.on("guildMemberAdd", async (member) => {
     try {
+        const welcomeChannel = client.channels.cache.get(process.env.WELCOME_CHANNEL);
+        if(welcomeChannel) {
+            await welcomeChannel.send(`¡Bienvenido a ReWorld, ${member.user.username}, te esperan aventuras fascinantes! 🌍⚔️`);
+        }
+
         await member.roles.add(MEMBER_ROLE_ID);
     } catch (error) {
         logger.error(error);
