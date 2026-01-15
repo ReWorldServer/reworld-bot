@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const logger = require("./logger.js");
 const client = new Discord.Client({ intents: ["Guilds", "GuildMessages", "MessageContent", "GuildMembers"] });
 const {getUser, setUser} = require("./database");
+const {startWebSocket, sendToHytale} = require("./hytale_sync");
 require("dotenv").config();
 
 client.on("clientReady", () => {
@@ -72,6 +73,12 @@ client.on("messageCreate", async (message) => {
 
         }
     }
+
+    sendToHytale({
+        source: "discord",
+        author: message.author.username,
+        message: message.content,
+    });
 });
 
 const MEMBER_ROLE_ID = process.env.MEMBER_ROLE;
@@ -106,3 +113,4 @@ client.on("interactionCreate", async interaction => {
 })
 
 client.login(process.env.TOKEN);
+startWebSocket()
