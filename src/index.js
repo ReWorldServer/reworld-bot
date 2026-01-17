@@ -24,7 +24,7 @@ const LEVEL_ROLES = {
     50: "1440683883468427335"
 };
 client.on("messageCreate", async (message) => {
-    if (message.author.bot || !message.guild) return;
+    if (message.author.bot || !message.guild || message.webhookId) return;
 
     const userID = message.author.id;
     const guildID = message.guild.id;
@@ -77,8 +77,8 @@ client.on("messageCreate", async (message) => {
 
     sendToHytale({
         source: "discord",
-        author: message.author.username,
-        message: message.content,
+        user: message.author.username,
+        content: message.content,
     });
 });
 
