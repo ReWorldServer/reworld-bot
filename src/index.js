@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const {WebhookClient} = require("discord.js");
 const logger = require("./logger.js");
 const client = new Discord.Client({ intents: ["Guilds", "GuildMessages", "MessageContent", "GuildMembers"] });
 const {getUser, setUser} = require("./database");
@@ -111,19 +112,20 @@ client.on("interactionCreate", async interaction => {
         await interaction.reply({content: "Error", flags: "ephemeral"})
     }
 })
-const webhookClient = new Discord.WebhookClient({ url: process.env.HYTALE_WEBHOOK_URL });
-startWebSocket(async (payload) => {
-    const hytaleChannel = client.channels.cache.get(process.env.HYTALE_CHANNEL);
-    if (!hytaleChannel || !webhookClient) return;
+const webhookClient = new WebhookClient({ url: process.env.HYTALE_WEBHOOK_URL });
 
-    try {
-        await webhookClient.send({
-            content: payload.content,
-            username: payload.user
-        });
-    } catch (err){
-        logger.error(err);
+startWebSocket(async (payload) => {
+    if (!webhookClient){
+        logger.error("No webhook client found.");
+        return;
     }
+
+    await webhookClient.send({
+        content: payload.content,
+        username: payload.user
+    });
+    const hytaleChannel = client.channels.cache.get(process.env.HYTALE_CHANNEL);
+    await hytaleChannel.send(payload.content);
 })
 
 client.login(process.env.TOKEN);
