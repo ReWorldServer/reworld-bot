@@ -111,7 +111,7 @@ client.on("interactionCreate", async interaction => {
         await interaction.reply({content: "Error", flags: "ephemeral"})
     }
 })
-const webhookClient = new WebhookClient({ url: process.env.HYTALE_WEBHOOK_URL });
+const webhookClient = new Discord.WebhookClient({ url: process.env.HYTALE_WEBHOOK_URL });
 startWebSocket(async (payload) => {
     const hytaleChannel = client.channels.cache.get(process.env.HYTALE_CHANNEL);
     if (!hytaleChannel || !webhookClient) return;
