@@ -111,20 +111,16 @@ client.on("interactionCreate", async interaction => {
         await interaction.reply({content: "Error", flags: "ephemeral"})
     }
 })
-
+const webhookClient = new WebhookClient({ url: process.env.HYTALE_WEBHOOK_URL });
 startWebSocket(async (payload) => {
     const hytaleChannel = client.channels.cache.get(process.env.HYTALE_CHANNEL);
-    if (!hytaleChannel) return;
+    if (!hytaleChannel || !webhookClient) return;
 
     try {
-        const guild = hytaleChannel.guild;
-        const me = guild.members.me;
-        await me.setNickname(payload.user);
-
-        await hytaleChannel.send(payload.content);
-
-        await me.setNickname("ReWorld Bot");
-
+        await webhookClient.send({
+            content: payload.message,
+            username: payload.user
+        });
     } catch (err){
         logger.error(err);
     }
