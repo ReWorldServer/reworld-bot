@@ -6,7 +6,7 @@ let hytaleSocket = null;
 function startWebSocket(onHytaleMessage) {
     const wss = new WebSocket.Server({ port: process.env.WEBSOCKET_PORT });
 
-    console.log(`[WS] Servidor WebSocket en puerto ${process.env.WEBSOCKET_PORT}`);
+    logger.info(`[WS] Servidor WebSocket en puerto ${process.env.WEBSOCKET_PORT}`);
 
     wss.on("connection", (ws) => {
         logger.info("[WS] Hytale conectado");

@@ -112,10 +112,12 @@ client.on("interactionCreate", async interaction => {
     }
 })
 
-client.login(process.env.TOKEN);
 startWebSocket((payload) => {
     const hytaleChannel = client.channels.cache.get(process.env.HYTALE_CHANNEL);
     if (hytaleChannel) {
         hytaleChannel.send(payload);
     }
 })
+
+client.login(process.env.TOKEN);
+
