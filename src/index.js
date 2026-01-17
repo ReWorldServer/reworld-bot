@@ -118,7 +118,7 @@ startWebSocket(async (payload) => {
 
     try {
         await webhookClient.send({
-            content: payload.message,
+            content: payload.content,
             username: payload.user
         });
     } catch (err){
