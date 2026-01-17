@@ -112,10 +112,21 @@ client.on("interactionCreate", async interaction => {
     }
 })
 
-startWebSocket((payload) => {
+startWebSocket(async (payload) => {
     const hytaleChannel = client.channels.cache.get(process.env.HYTALE_CHANNEL);
-    if (hytaleChannel) {
-        hytaleChannel.send(payload);
+    if (!hytaleChannel) return;
+
+    try {
+        const guild = hytaleChannel.guild;
+        const me = guild.members.me;
+        await me.setNickname(payload.user);
+
+        await hytaleChannel.send(payload.content);
+
+        await me.setNickname("ReWorld Bot");
+
+    } catch (err){
+        logger.error(err);
     }
 })
 
