@@ -1,6 +1,5 @@
 const WebSocket = require("ws");
 const logger = require("./logger");
-//const config = require("./config.json");
 
 let hytaleSocket = null;
 
@@ -16,9 +15,6 @@ function startWebSocket(onHytaleMessage) {
         ws.on("message", (data) => {
             try {
                 const payload = JSON.parse(data);
-
-                //if (payload.token !== config.secret) return;
-
                 if (payload.source === "hytale") {
                     onHytaleMessage(payload);
                 }
