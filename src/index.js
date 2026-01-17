@@ -124,8 +124,7 @@ startWebSocket(async (payload) => {
         content: payload.content,
         username: payload.user
     });
-    const hytaleChannel = client.channels.cache.get(process.env.HYTALE_CHANNEL);
-    await hytaleChannel.send(payload.content);
+
 })
 
 client.login(process.env.TOKEN);
